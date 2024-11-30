@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import React, { useState, useEffect } from 'react';
+import { EmpruntProvider } from './context/EmpruntContext'; 
+import ListLivre from './components/ListLivre'; 
+import LivresEmpruntes from './components/LivresEmpruntes'; 
+import { fetchLivres } from './services/api'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+const App = () => {
+    const [livres, setLivres] = useState([]); // Liste des livres
+
+    useEffect(() => {
+        fetchLivres()
+            .then((data) => setLivres(data))
+            .catch(() => console.error('Erreur lors du chargement des livres'));
+    }, []);
+
+    return (
+        <EmpruntProvider>
+            <div>
+                <ListLivre livres={livres} />
+                <LivresEmpruntes />
+            </div>
+        </EmpruntProvider>
+    );
+};
 
 export default App;
